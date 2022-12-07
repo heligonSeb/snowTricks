@@ -19,6 +19,10 @@ class Movie
     #[ORM\Column(length: 255)]
     private ?string $balise = null;
 
+    #[ORM\ManyToOne(inversedBy: 'movies')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Figure $figure_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -44,6 +48,18 @@ class Movie
     public function setBalise(string $balise): self
     {
         $this->balise = $balise;
+
+        return $this;
+    }
+
+    public function getFigureId(): ?Figure
+    {
+        return $this->figure_id;
+    }
+
+    public function setFigureId(?Figure $figure_id): self
+    {
+        $this->figure_id = $figure_id;
 
         return $this;
     }

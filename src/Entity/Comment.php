@@ -20,6 +20,14 @@ class Comment
     #[ORM\Column(type: Types::TEXT)]
     private ?string $message = null;
 
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user_id = null;
+
+    #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Figure $figure_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +53,30 @@ class Comment
     public function setMessage(string $message): self
     {
         $this->message = $message;
+
+        return $this;
+    }
+
+    public function getUserId(): ?User
+    {
+        return $this->user_id;
+    }
+
+    public function setUserId(?User $user_id): self
+    {
+        $this->user_id = $user_id;
+
+        return $this;
+    }
+
+    public function getFigureId(): ?Figure
+    {
+        return $this->figure_id;
+    }
+
+    public function setFigureId(?Figure $figure_id): self
+    {
+        $this->figure_id = $figure_id;
 
         return $this;
     }

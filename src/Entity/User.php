@@ -41,6 +41,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Picture $picture_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -155,6 +159,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getPictureId(): ?Picture
+    {
+        return $this->picture_id;
+    }
+
+    public function setPictureId(Picture $picture_id): self
+    {
+        $this->picture_id = $picture_id;
 
         return $this;
     }

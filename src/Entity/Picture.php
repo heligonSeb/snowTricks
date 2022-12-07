@@ -22,6 +22,9 @@ class Picture
     #[ORM\Column(length: 150)]
     private ?string $folder = null;
 
+    #[ORM\ManyToOne(inversedBy: 'pictures')]
+    private ?Figure $figure_id = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Picture
     public function setFolder(string $folder): self
     {
         $this->folder = $folder;
+
+        return $this;
+    }
+
+    public function getFigureId(): ?Figure
+    {
+        return $this->figure_id;
+    }
+
+    public function setFigureId(?Figure $figure_id): self
+    {
+        $this->figure_id = $figure_id;
 
         return $this;
     }
