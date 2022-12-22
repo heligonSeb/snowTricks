@@ -1,5 +1,9 @@
 {% extends "base.html.twig" %}
 
-{% block title %} Hello WOrld {% endblock %}
+{% block title %} Snowtrick-home {% endblock %}
 
-{% block body %} Test de page symfony {% endblock %}
+{% block body %} 
+    {% include  '/home/intro.html.twig' %}
+
+    {% include '/home/list_tricks.html.twig' %}
+{% endblock %}

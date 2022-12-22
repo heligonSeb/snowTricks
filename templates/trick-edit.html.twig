@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block title %} Snowtrick-trick {% endblock %}
+
+{% block body %} 
+    {% include  '/trick/trick_intro.html.twig' %}
+
+    {% include '/trick/edit/trick_edit_media.html.twig' %}
+
+    {% include '/trick/edit/trick_edit_description.html.twig' %}
+
+    <div>
+        <a>Delete</a>
+
+        <a>Save</a>
+    <div>
+{% endblock %}
