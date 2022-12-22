@@ -14,25 +14,26 @@ class TricksController extends AbstractController
         return $this->render('all-tricks.html.twig');
     }
 
-    #[Route('/trick/:id', name: "trick", methods: ['GET'])]
-    public function trick(): Response
+    #[Route('/tricks/{id}', name: "trick", methods: ['GET'])]
+    public function trick(int $id): Response
     {
+        var_dump($id);
         return $this->render('trick.html.twig');
     }
 
-    #[Route('/trick/:id/edit', name: "trick_edit", methods: ['GET'])]
+    #[Route('/tricks/{id}/edit', name: "trick_edit", methods: ['GET'])]
     public function trickEdit(): Response
     {
         return $this->render('trick-edit.html.twig');
     }
 
-    #[Route('/trick/:id/edit/Save', name: "save_edit", methods: ['GET'])]
+    #[Route('/tricks/add', name: "add_trick", methods: ['GET'])]
     public function saveEdit(): Response
     {
-        return $this->render('trick.html.twig');
+        return $this->render('add-trick.html.twig');
     }
 
-    #[Route('/trick/:id/delete', name: "trick_delete", methods: ['GET'])]
+    #[Route('/tricks/:id/delete', name: "trick_delete", methods: ['GET'])]
     public function trickDelete(): Response
     {
         return $this->render('trick-delete.html.twig');
