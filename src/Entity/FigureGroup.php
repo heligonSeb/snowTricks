@@ -18,7 +18,7 @@ class FigureGroup
     #[ORM\Column(length: 200)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'figureGroup_id', targetEntity: Figure::class)]
+    #[ORM\OneToMany(mappedBy: 'figure_group', targetEntity: Figure::class)]
     private Collection $figures;
 
     public function __construct()

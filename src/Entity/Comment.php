@@ -22,11 +22,11 @@ class Comment
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user_id = null;
+    private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Figure $figure_id = null;
+    private ?Figure $figure = null;
 
     public function getId(): ?int
     {
@@ -71,12 +71,12 @@ class Comment
 
     public function getFigureId(): ?Figure
     {
-        return $this->figure_id;
+        return $this->figure;
     }
 
     public function setFigureId(?Figure $figure_id): self
     {
-        $this->figure_id = $figure_id;
+        $this->figure = $figure_id;
 
         return $this;
     }

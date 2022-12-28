@@ -3,11 +3,18 @@
 {% block title %} Snowtrick-trick {% endblock %}
 
 {% block body %} 
-    {% include  '/trick/trick_intro.html.twig' %}
+    {# {% include  '/trick/trick_intro.html.twig' %}
 
     {% include '/trick/edit/trick_edit_media.html.twig' %}
 
-    {% include '/trick/edit/trick_edit_description.html.twig' %}
+    {% include '/trick/edit/trick_edit_description.html.twig' %} #}
+
+    {{ form_start(trickForm) }}
+        {{ form_row(trickForm.name) }}
+        {{ form_row(trickForm.description) }}
+        {{ form_row(trickForm.figureGroup_id) }}
+    {{ form_end(trickForm) }}
+
 
     <div>
         <a>Delete</a>
