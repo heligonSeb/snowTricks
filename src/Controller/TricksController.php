@@ -2,7 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Figure;
+use App\Form\AddTrickFormType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -17,7 +21,6 @@ class TricksController extends AbstractController
     #[Route('/tricks/{id}', name: "trick", methods: ['GET'])]
     public function trick(int $id): Response
     {
-        var_dump($id);
         return $this->render('trick.html.twig');
     }
 
@@ -27,13 +30,24 @@ class TricksController extends AbstractController
         return $this->render('trick-edit.html.twig');
     }
 
-    #[Route('/tricks/add', name: "add_trick", methods: ['GET'])]
-    public function saveEdit(): Response
+    #[Route('/tricksadd', name: "add_trick", methods: ['GET'])]
+    public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        return $this->render('add-trick.html.twig');
+        $trick = new Figure();
+        $trick->setCreateDate(new \DateTime());
+
+        $form = $this->createForm(TrickFormType::class, $trick);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($trick);
+            $entityManager->flush();
+        }
+
+        return $this->render('add-trick.html.twig', ['trickForm' => $form->createView()]);
     }
 
-    #[Route('/tricks/:id/delete', name: "trick_delete", methods: ['GET'])]
+    #[Route('/tricks/{id}/delete', name: "trick_delete", methods: ['GET'])]
     public function trickDelete(): Response
     {
         return $this->render('trick-delete.html.twig');
