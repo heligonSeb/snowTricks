@@ -38,8 +38,8 @@ class TricksController extends AbstractController
         ]);
     }
 
-    #[Route('/tricks/{id}/edit', name: "trick_edit", methods: ['GET'])]
-    public function trickEdit(Request $request, FigureRepository $figureRepository, int $id): Response
+    #[Route('/tricks/{id}/edit', name: "trick_edit")]
+    public function trickEdit(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, int $id): Response
     {
         $trick = $figureRepository->find($id);
 
@@ -51,6 +51,13 @@ class TricksController extends AbstractController
 
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($trick);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
+        }
 
         return $this->render('trick-edit.html.twig', [
             'trick' => $trick,
@@ -78,8 +85,17 @@ class TricksController extends AbstractController
     }
 
     #[Route('/tricks/{id}/delete', name: "trick_delete", methods: ['GET'])]
-    public function trickDelete(): Response
+    public function trickDelete(FigureRepository $figureRepository, EntityManagerInterface $entityManager, int $id): Response
     {
-        return $this->render('trick-delete.html.twig');
+        $trick = $figureRepository->find($id);
+
+        if (!$trick) {
+            return $this->render('error.html.twig');
+        }
+
+        $entityManager->remove($trick);
+        $entityManager->flush();
+
+        return $this->render('all-trick.html.twig');
     }
 }

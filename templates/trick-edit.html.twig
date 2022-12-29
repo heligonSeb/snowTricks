@@ -3,22 +3,21 @@
 {% block title %} Snowtrick-trick {% endblock %}
 
 {% block body %} 
-    {# {% include  '/trick/trick_intro.html.twig' %}
-
-    {% include '/trick/edit/trick_edit_media.html.twig' %}
-
-    {% include '/trick/edit/trick_edit_description.html.twig' %} #}
+    <h1>Modifier la figure</h1>
 
     {{ form_start(trickForm) }}
         {{ form_row(trickForm.name) }}
         {{ form_row(trickForm.description) }}
         {{ form_row(trickForm.figureGroup_id) }}
+
+        <div>
+            <a class="btn btn-danger" href="{{ path('trick_delete', {id: trick.id}) }}">
+                Delete
+            </a>
+
+            <button type="submite" class="btn btn-success">Enregistrer</button>
+        <div>
     {{ form_end(trickForm) }}
 
 
-    <div>
-        <a>Delete</a>
-
-        <a>Save</a>
-    <div>
 {% endblock %}
