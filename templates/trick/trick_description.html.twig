@@ -1,15 +1,18 @@
 <section>
-    <div>
-        Lipsum
-
+    <div class="my-4">
+        {{ trick.description }}
     </div>
 
 
-    <div>
-        <span>auteur</span>
-        <span>date de creation<span>
-        <span>groupe</span>
-        <span>date de modifiction</span>
+    <div class="w-50 d-flex justify-content-start">
+        <span class="badge bg-secondary">
+            {% if trick.edit_date|default %}
+                Modifié le {{ trick.edit_date|date("d/m/Y H:i:s") }}
+            {% else %}
+                Créé le {{ trick.create_date|date("d/m/Y H:i:s") }}
+            {% endif %}
+        </span>
+        <span class="badge bg-secondary">{{trickGroup.name}}</span>
     </div>
 
 

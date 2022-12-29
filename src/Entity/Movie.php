@@ -21,7 +21,7 @@ class Movie
 
     #[ORM\ManyToOne(inversedBy: 'movies')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Figure $figure_id = null;
+    private ?Figure $figure = null;
 
     public function getId(): ?int
     {
@@ -54,12 +54,12 @@ class Movie
 
     public function getFigureId(): ?Figure
     {
-        return $this->figure_id;
+        return $this->figure;
     }
 
     public function setFigureId(?Figure $figure_id): self
     {
-        $this->figure_id = $figure_id;
+        $this->figure = $figure_id;
 
         return $this;
     }

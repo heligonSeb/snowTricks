@@ -30,7 +30,7 @@ class Figure
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?FigureGroup $figureGroup_id = null;
+    private ?FigureGroup $figureGroup = null;
 
     #[ORM\OneToMany(mappedBy: 'figure_id', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
@@ -53,24 +53,24 @@ class Figure
         return $this->id;
     }
 
-    public function getCreateDate(): ?\DateTimeInterface
+    public function getCreate_date(): ?\DateTimeInterface
     {
         return $this->create_date;
     }
 
-    public function setCreateDate(\DateTimeInterface $createDate): self
+    public function setCreate_date(\DateTimeInterface $createDate): self
     {
         $this->create_date = $createDate;
 
         return $this;
     }
 
-    public function getEditDate(): ?\DateTimeInterface
+    public function getEdit_date(): ?\DateTimeInterface
     {
         return $this->edit_date;
     }
 
-    public function setEditDate(?\DateTimeInterface $editDate): self
+    public function setEdit_date(?\DateTimeInterface $editDate): self
     {
         $this->edit_date = $editDate;
 
@@ -103,12 +103,12 @@ class Figure
 
     public function getFigureGroupId(): ?FigureGroup
     {
-        return $this->figureGroup_id;
+        return $this->figureGroup;
     }
 
     public function setFigureGroupId(?FigureGroup $figureGroup_id): self
     {
-        $this->figureGroup_id = $figureGroup_id;
+        $this->figureGroup = $figureGroup_id;
 
         return $this;
     }

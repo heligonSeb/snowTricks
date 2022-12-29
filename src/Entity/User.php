@@ -43,7 +43,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Picture $picture_id = null;
+    private ?Picture $picture = null;
 
     public function getId(): ?int
     {
@@ -165,12 +165,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getPictureId(): ?Picture
     {
-        return $this->picture_id;
+        return $this->picture;
     }
 
     public function setPictureId(Picture $picture_id): self
     {
-        $this->picture_id = $picture_id;
+        $this->picture = $picture_id;
 
         return $this;
     }
