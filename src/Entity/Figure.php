@@ -17,10 +17,10 @@ class Figure
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private ?\DateTimeInterface $create_date = null;
+    private ?\DateTimeInterface $createDate = null;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $edit_date = null;
+    private ?\DateTimeInterface $editDate = null;
 
     #[ORM\Column(length: 200)]
     private ?string $name = null;
@@ -53,26 +53,26 @@ class Figure
         return $this->id;
     }
 
-    public function getCreate_date(): ?\DateTimeInterface
+    public function getCreateDate(): ?\DateTimeInterface
     {
-        return $this->create_date;
+        return $this->createDate;
     }
 
-    public function setCreate_date(\DateTimeInterface $createDate): self
+    public function setCreateDate(\DateTimeInterface $createDate): self
     {
-        $this->create_date = $createDate;
+        $this->createDate = $createDate;
 
         return $this;
     }
 
-    public function getEdit_date(): ?\DateTimeInterface
+    public function getEditDate(): ?\DateTimeInterface
     {
-        return $this->edit_date;
+        return $this->editDate;
     }
 
-    public function setEdit_date(?\DateTimeInterface $editDate): self
+    public function setEditDate(?\DateTimeInterface $editDate): self
     {
-        $this->edit_date = $editDate;
+        $this->editDate = $editDate;
 
         return $this;
     }
