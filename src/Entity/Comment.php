@@ -15,7 +15,7 @@ class Comment
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIMETZ_MUTABLE)]
-    private ?\DateTimeInterface $create_date = null;
+    private ?\DateTimeInterface $createDate = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $message = null;
@@ -35,12 +35,12 @@ class Comment
 
     public function getCreateDate(): ?\DateTimeInterface
     {
-        return $this->create_date;
+        return $this->createDate;
     }
 
-    public function setCreateDate(\DateTimeInterface $create_date): self
+    public function setCreateDate(\DateTimeInterface $createDate): self
     {
-        $this->create_date = $create_date;
+        $this->createDate = $createDate;
 
         return $this;
     }
@@ -57,26 +57,26 @@ class Comment
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getUser(): ?User
     {
-        return $this->user_id;
+        return $this->user;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUser(?User $user): self
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
 
-    public function getFigureId(): ?Figure
+    public function getFigure(): ?Figure
     {
         return $this->figure;
     }
 
-    public function setFigureId(?Figure $figure_id): self
+    public function setFigure(?Figure $figure): self
     {
-        $this->figure = $figure_id;
+        $this->figure = $figure;
 
         return $this;
     }

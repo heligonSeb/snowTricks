@@ -6,7 +6,6 @@ use App\Entity\Figure;
 use App\Form\TrickFormType;
 use App\Repository\FigureGroupRepository;
 use App\Repository\FigureRepository;
-use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +20,8 @@ class TricksController extends AbstractController
         return $this->render('all-tricks.html.twig');
     }
 
-    #[Route('/tricks/add', name: "add_trick")]
-    public function add(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/tricks/add', name: "add_trick", methods:["GET", "POST"])]
+    public function add(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepo): Response
     {
         $trick = new Figure();
         
@@ -30,8 +29,39 @@ class TricksController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
+            dump($form);
             $trick->setCreateDate(new \DateTime());
-    
+
+            //check if trick->getName() already exist
+            $findMatch = $figureRepo->findOneBy(array('name' => $trick->getName()));
+
+            if ($findMatch) {
+                return $this->render('error.html.twig');
+            }
+
+            dump($form->get('pictures'));
+            //processing/handling pictures send
+            $pictures = $form->get('pictures')->getData();
+
+
+
+
+            foreach($pictures as $picture) {
+                dump($picture);
+                dump($picture->guessExtension());
+                //$picture->setExtension($picture->guessExtension());
+                // $pictureName = pathinfo($pictures->getClientOriginalName(), PATHINFO_FILENAME);
+
+                // dump($pictureName);
+            }
+            //End of processing/handling pictures
+
+            
+            dump($pictures);
+            die;
+
+
+
             $entityManager->persist($trick);
             $entityManager->flush();
     
@@ -50,7 +80,7 @@ class TricksController extends AbstractController
             return $this->render('error.html.twig');
         }
 
-        $trickGroup = $figureGroupRepository->find($trick->getFigureGroupId());
+        $trickGroup = $figureGroupRepository->find($trick->getFigureGroup());
 
         return $this->render('trick.html.twig', [
             'trick' => $trick,
@@ -66,7 +96,6 @@ class TricksController extends AbstractController
         if (!$trick) {
             return $this->render('error.html.twig');
         }
-
         
         $form = $this->createForm(TrickFormType::class, $trick);
         $form->handleRequest($request);
@@ -99,6 +128,6 @@ class TricksController extends AbstractController
         $entityManager->remove($trick);
         $entityManager->flush();
 
-        return $this->render('all-trick.html.twig');
+        return $this->redirectToRoute('all_tricks');
     }
 }

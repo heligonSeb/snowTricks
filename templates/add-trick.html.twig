@@ -8,12 +8,72 @@
     <h1 class="text-center">Ajouter une figure</h1>
 
     {{ form_start(trickForm) }}
+        <div id="pictures" data-prototype="{{ form_row(trickForm.pictures.vars.prototype)|e('html_attr') }}">
+            {{ form_row(trickForm.pictures)}}
+            <span></span>
+        </div>
+
         {{ form_row(trickForm.name) }}
         {{ form_row(trickForm.description) }}
-        {{ form_row(trickForm.figureGroup_id) }}
+        {{ form_row(trickForm.figureGroup) }}
 
         <button type="submit" class="btn btn-primary">Enregistrer</button>
     {{ form_end(trickForm)}}
 
 
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        let collection, buttonAdd, span;
+
+        window.onload = () => {
+            collection = document.querySelector("#pictures");
+            span = collection.querySelector("span");
+
+            buttonAdd = document.createElement("button");
+            buttonAdd.className = "add-pictures btn btn-primary";
+            buttonAdd.innerText = "Ajouter une image";
+
+            let newButton = span.append(buttonAdd);
+
+            collection.dataset.index = collection.querySelectorAll('input').length;
+
+            buttonAdd.addEventListener("click", function() {
+                addButton(collection, buttonAdd);
+            });
+        }
+
+
+        function addButton(collection, newButton) {
+            let prototype = collection.dataset.prototype;
+
+            let index = collection.dataset.index;
+
+            prototype = prototype.replace(/__name__/g, index);
+
+            let content = document.createElement("html");
+            content.innerHTML = prototype;
+
+            let newForm = content.querySelector("div");
+
+            let buttonDelete = document.createElement("button");
+            buttonDelete.type = "button";
+            buttonDelete.className = "btn btn-danger";
+            buttonDelete.id = "delete-picture-" + index;
+            buttonDelete.innerText = "Supprimer cette image";
+
+            newForm.append(buttonDelete);
+
+            collection.dataset.index++;
+
+            let buttonAdd = collection.querySelector(".add-pictures");
+            span.insertBefore(newForm, buttonAdd);
+
+            buttonDelete.addEventListener('click', function() {
+                this.previousElementSibling.parentElement.remove();
+            });
+        }
+    </script>
 {% endblock %}

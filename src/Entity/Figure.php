@@ -32,13 +32,13 @@ class Figure
     #[ORM\JoinColumn(nullable: false)]
     private ?FigureGroup $figureGroup = null;
 
-    #[ORM\OneToMany(mappedBy: 'figure_id', targetEntity: Comment::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'figure_id', targetEntity: Movie::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Movie::class, orphanRemoval: true)]
     private Collection $movies;
 
-    #[ORM\OneToMany(mappedBy: 'figure_id', targetEntity: Picture::class)]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Picture::class, cascade: ["persist"])]
     private Collection $pictures;
 
     public function __construct()
@@ -101,14 +101,14 @@ class Figure
         return $this;
     }
 
-    public function getFigureGroupId(): ?FigureGroup
+    public function getFigureGroup(): ?FigureGroup
     {
         return $this->figureGroup;
     }
 
-    public function setFigureGroupId(?FigureGroup $figureGroup_id): self
+    public function setFigureGroup(?FigureGroup $figureGroup): self
     {
-        $this->figureGroup = $figureGroup_id;
+        $this->figureGroup = $figureGroup;
 
         return $this;
     }
@@ -125,7 +125,7 @@ class Figure
     {
         if (!$this->comments->contains($comment)) {
             $this->comments->add($comment);
-            $comment->setFigureId($this);
+            $comment->setFigure($this);
         }
 
         return $this;
@@ -135,8 +135,8 @@ class Figure
     {
         if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
-            if ($comment->getFigureId() === $this) {
-                $comment->setFigureId(null);
+            if ($comment->getFigure() === $this) {
+                $comment->setFigure(null);
             }
         }
 
@@ -155,7 +155,7 @@ class Figure
     {
         if (!$this->movies->contains($movie)) {
             $this->movies->add($movie);
-            $movie->setFigureId($this);
+            $movie->setFigure($this);
         }
 
         return $this;
@@ -165,8 +165,8 @@ class Figure
     {
         if ($this->movies->removeElement($movie)) {
             // set the owning side to null (unless already changed)
-            if ($movie->getFigureId() === $this) {
-                $movie->setFigureId(null);
+            if ($movie->getFigure() === $this) {
+                $movie->setFigure(null);
             }
         }
 
@@ -185,7 +185,7 @@ class Figure
     {
         if (!$this->pictures->contains($picture)) {
             $this->pictures->add($picture);
-            $picture->setFigureId($this);
+            $picture->setFigure($this);
         }
 
         return $this;
@@ -195,8 +195,8 @@ class Figure
     {
         if ($this->pictures->removeElement($picture)) {
             // set the owning side to null (unless already changed)
-            if ($picture->getFigureId() === $this) {
-                $picture->setFigureId(null);
+            if ($picture->getFigure() === $this) {
+                $picture->setFigure(null);
             }
         }
 

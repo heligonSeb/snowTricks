@@ -8,7 +8,7 @@
     {{ form_start(trickForm) }}
         {{ form_row(trickForm.name) }}
         {{ form_row(trickForm.description) }}
-        {{ form_row(trickForm.figureGroup_id) }}
+        {{ form_row(trickForm.figureGroup) }}
 
         <div>
             <a class="btn btn-danger" href="{{ path('trick_delete', {id: trick.id}) }}">
