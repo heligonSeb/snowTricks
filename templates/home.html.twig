@@ -3,7 +3,11 @@
 {% block title %} Snowtrick-home {% endblock %}
 
 {% block body %} 
-    {% include  '/home/intro.html.twig' %}
 
-    {% include '/home/list_tricks.html.twig' %}
+    <div class="container">
+        {% include  '/home/intro.html.twig' %}
+
+        {% include '/home/list_tricks.html.twig' %}
+    </div>
+
 {% endblock %}

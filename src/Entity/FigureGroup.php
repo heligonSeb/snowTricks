@@ -55,7 +55,7 @@ class FigureGroup
     {
         if (!$this->figures->contains($figure)) {
             $this->figures->add($figure);
-            $figure->setFigureGroupId($this);
+            $figure->setFigureGroup($this);
         }
 
         return $this;
@@ -65,8 +65,8 @@ class FigureGroup
     {
         if ($this->figures->removeElement($figure)) {
             // set the owning side to null (unless already changed)
-            if ($figure->getFigureGroupId() === $this) {
-                $figure->setFigureGroupId(null);
+            if ($figure->getFigureGroup() === $this) {
+                $figure->setFigureGroup(null);
             }
         }
 

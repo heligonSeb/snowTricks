@@ -66,14 +66,14 @@ class Picture
         return $this;
     }
 
-    public function getFigureId(): ?Figure
+    public function getFigure(): ?Figure
     {
         return $this->figure;
     }
 
-    public function setFigureId(?Figure $figure_id): self
+    public function setFigure(?Figure $figure): self
     {
-        $this->figure = $figure_id;
+        $this->figure = $figure;
 
         return $this;
     }
