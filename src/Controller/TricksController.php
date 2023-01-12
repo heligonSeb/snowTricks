@@ -49,6 +49,8 @@ class TricksController extends AbstractController
             }
             // end check if trick already exist
 
+            //clear pictures already link to $tricks
+            $trick->getPictures()->clear();
 
             // get all pictures
             $pictures = $request->files->get('trick_form')['pictures'];
@@ -59,7 +61,6 @@ class TricksController extends AbstractController
 
                 // use the picture service for add a picture
                 $file = $pictureService->add($picture['images'], $folder, 200, 200);
-
 
                 $pic = new Picture();
                 $pic->setName($file);
