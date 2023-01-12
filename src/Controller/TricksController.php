@@ -3,17 +3,27 @@
 namespace App\Controller;
 
 use App\Entity\Figure;
+use App\Entity\Picture;
 use App\Form\TrickFormType;
 use App\Repository\FigureGroupRepository;
 use App\Repository\FigureRepository;
+use App\Service\PictureService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class TricksController extends AbstractController
 {
+    private $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+    }
+
     #[Route('/tricks', name: "all_tricks", methods: ['GET'])]
     public function tricksList(): Response
     {
@@ -21,7 +31,7 @@ class TricksController extends AbstractController
     }
 
     #[Route('/tricks/add', name: "add_trick", methods:["GET", "POST"])]
-    public function add(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepo): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepo, PictureService $pictureService): Response
     {
         $trick = new Figure();
         
@@ -29,7 +39,6 @@ class TricksController extends AbstractController
         $form->handleRequest($request);
         
         if ($form->isSubmitted() && $form->isValid()) {
-            dump($form);
             $trick->setCreateDate(new \DateTime());
 
             //check if trick->getName() already exist
@@ -38,29 +47,30 @@ class TricksController extends AbstractController
             if ($findMatch) {
                 return $this->render('error.html.twig');
             }
+            // end check if trick already exist
 
-            dump($form->get('pictures'));
-            //processing/handling pictures send
-            $pictures = $form->get('pictures')->getData();
+            //clear pictures already link to $tricks
+            $trick->getPictures()->clear();
 
+            // get all pictures
+            $pictures = $request->files->get('trick_form')['pictures'];
 
+            foreach ($pictures as $picture) {
+                // set the folder
+                $folder = "tricks";
 
+                // use the picture service for add a picture
+                $file = $pictureService->add($picture['images'], $folder, 200, 200);
 
-            foreach($pictures as $picture) {
-                dump($picture);
-                dump($picture->guessExtension());
-                //$picture->setExtension($picture->guessExtension());
-                // $pictureName = pathinfo($pictures->getClientOriginalName(), PATHINFO_FILENAME);
+                $pic = new Picture();
+                $pic->setName($file);
+                $pic->setFolder($folder);
 
-                // dump($pictureName);
+                $ext = explode(".", $file);
+                $pic->setExtension($ext[1]);
+
+                $trick->addPicture($pic);
             }
-            //End of processing/handling pictures
-
-            
-            dump($pictures);
-            die;
-
-
 
             $entityManager->persist($trick);
             $entityManager->flush();
