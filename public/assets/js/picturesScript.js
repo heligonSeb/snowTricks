@@ -1,27 +1,27 @@
-let collection, buttonAdd, span;
+let collectionPictures, buttonAddPcitures, spanPictures;
 
 window.onload = () => {
-    collection = document.querySelector("#pictures");
-    span = collection.querySelector("span");
+    collectionPictures = document.querySelector("#pictures");
+    spanPictures = collectionPictures.querySelector("span");
 
-    buttonAdd = document.createElement("button");
-    buttonAdd.className = "add-pictures btn btn-primary";
-    buttonAdd.innerText = "Ajouter une image";
+    buttonAddPcitures = document.createElement("button");
+    buttonAddPcitures.className = "add-pictures btn btn-primary";
+    buttonAddPcitures.innerText = "Ajouter une image";
 
-    let newButton = span.append(buttonAdd);
+    spanPictures.append(buttonAddPcitures);
 
-    collection.dataset.index = collection.querySelectorAll('input').length;
+    collectionPictures.dataset.index = collectionPictures.querySelectorAll('input').length;
 
-    buttonAdd.addEventListener("click", function() {
-        addButton(collection, buttonAdd);
+    buttonAddPcitures.addEventListener("click", function() {
+        addButtonPictures(collectionPictures);
     });
 }
 
 
-function addButton(collection, newButton) {
-    let prototype = collection.dataset.prototype;
+function addButtonPictures(collectionPictures) {
+    let prototype = collectionPictures.dataset.prototype;
 
-    let index = collection.dataset.index;
+    let index = collectionPictures.dataset.index;
 
     prototype = prototype.replace(/__name__/g, index);
 
@@ -38,10 +38,10 @@ function addButton(collection, newButton) {
 
     newForm.append(buttonDelete);
 
-    collection.dataset.index++;
+    collectionPictures.dataset.index++;
 
-    let buttonAdd = collection.querySelector(".add-pictures");
-    span.insertBefore(newForm, buttonAdd);
+    let buttonAddPcitures = collectionPictures.querySelector(".add-pictures");
+    spanPictures.insertBefore(newForm, buttonAddPcitures);
 
     buttonDelete.addEventListener('click', function() {
         this.previousElementSibling.parentElement.remove();

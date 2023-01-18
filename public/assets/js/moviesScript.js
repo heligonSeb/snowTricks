@@ -1,27 +1,27 @@
-let collection, buttonAdd, span;
+let collectionMovies, buttonAddMovies, spanMovies;
 
 window.onload = () => {
-    collection = document.querySelector("#movies");
-    span = collection.querySelector("span");
+    collectionMovies = document.querySelector("#movies");
+    spanMovies = collectionMovies.querySelector("span");
 
-    buttonAdd = document.createElement("button");
-    buttonAdd.className = "add-pictures btn btn-primary";
-    buttonAdd.innerText = "Ajouter une vidéo";
+    buttonAddMovies = document.createElement("button");
+    buttonAddMovies.className = "add-movies btn btn-primary";
+    buttonAddMovies.innerText = "Ajouter une vidéo";
 
-    let newButton = span.append(buttonAdd);
+    spanMovies.append(buttonAddMovies);
 
-    collection.dataset.index = collection.querySelectorAll('input').length;
+    collectionMovies.dataset.index = collectionMovies.querySelectorAll('input').length;
 
-    buttonAdd.addEventListener("click", function() {
-        addButton(collection, buttonAdd);
+    buttonAddMovies.addEventListener("click", function() {
+        addButtonMovies(collectionMovies);
     });
 }
 
 
-function addButton(collection, newButton) {
-    let prototype = collection.dataset.prototype;
+function addButtonMovies(collectionMovies) {
+    let prototype = collectionMovies.dataset.prototype;
 
-    let index = collection.dataset.index;
+    let index = collectionMovies.dataset.index;
 
     prototype = prototype.replace(/__name__/g, index);
 
@@ -33,15 +33,15 @@ function addButton(collection, newButton) {
     let buttonDelete = document.createElement("button");
     buttonDelete.type = "button";
     buttonDelete.className = "btn btn-danger";
-    buttonDelete.id = "delete-picture-" + index;
-    buttonDelete.innerText = "Supprimer cette image";
+    buttonDelete.id = "delete-movie-" + index;
+    buttonDelete.innerText = "Supprimer cette video";
 
     newForm.append(buttonDelete);
 
-    collection.dataset.index++;
+    collectionMovies.dataset.index++;
 
-    let buttonAdd = collection.querySelector(".add-pictures");
-    span.insertBefore(newForm, buttonAdd);
+    let buttonAddMovies = collectionMovies.querySelector(".add-movies");
+    spanMovies.insertBefore(newForm, buttonAddMovies);
 
     buttonDelete.addEventListener('click', function() {
         this.previousElementSibling.parentElement.remove();

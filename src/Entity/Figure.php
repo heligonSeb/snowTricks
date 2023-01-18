@@ -35,10 +35,10 @@ class Figure
     #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Movie::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Movie::class, orphanRemoval: true, cascade: ["persist"])]
     private Collection $movies;
 
-    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Picture::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Picture::class,  orphanRemoval: true, cascade: ["persist"])]
     private Collection $pictures;
 
     public function __construct()
@@ -153,7 +153,9 @@ class Figure
 
     public function addMovie(Movie $movie): self
     {
-        if (!$this->movies->contains($movie)) {
+        dump('there');
+        if (!$this->movies->contains($movie) || $movie->getId() === null) {
+            dump('here');
             $this->movies->add($movie);
             $movie->setFigure($this);
         }

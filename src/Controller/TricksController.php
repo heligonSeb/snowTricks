@@ -113,6 +113,13 @@ class TricksController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setEditDate(new \DateTime());
 
+            $movies = $form->get('movies')->getData();
+
+            foreach ($movies as $movie) {
+                $movie->setName('test'); 
+                $trick->addMovie($movie);
+            }
+
             $entityManager->persist($trick);
             $entityManager->flush();
 

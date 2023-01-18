@@ -5,6 +5,7 @@ namespace App\Form;
 use App\Entity\Figure;
 use App\Entity\FigureGroup;
 use App\Form\PicturesType;
+use App\Form\MoviesFormType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
@@ -21,6 +22,15 @@ class TrickFormType extends AbstractType
             //form Pictures
             ->add('pictures', CollectionType::class, [
                 'entry_type' => PicturesType::class,
+                'label' => false,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'allow_delete' => true,
+            ])
+
+            //form Movies
+            ->add('movies', CollectionType::class, [
+                'entry_type' => MoviesFormType::class,
                 'label' => false,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
