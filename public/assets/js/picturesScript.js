@@ -1,21 +1,21 @@
-let collectionPictures, buttonAddPcitures, spanPictures;
+let collectionPictures, buttonAddPictures, spanPictures;
 
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', () => {
     collectionPictures = document.querySelector("#pictures");
     spanPictures = collectionPictures.querySelector("span");
 
-    buttonAddPcitures = document.createElement("button");
-    buttonAddPcitures.className = "add-pictures btn btn-primary";
-    buttonAddPcitures.innerText = "Ajouter une image";
+    buttonAddPictures = document.createElement("button");
+    buttonAddPictures.className = "add-pictures btn btn-primary";
+    buttonAddPictures.innerText = "Ajouter une image";
 
-    spanPictures.append(buttonAddPcitures);
+    spanPictures.append(buttonAddPictures);
 
     collectionPictures.dataset.index = collectionPictures.querySelectorAll('input').length;
 
-    buttonAddPcitures.addEventListener("click", function() {
+    buttonAddPictures.addEventListener("click", function() {
         addButtonPictures(collectionPictures);
     });
-}
+});
 
 
 function addButtonPictures(collectionPictures) {

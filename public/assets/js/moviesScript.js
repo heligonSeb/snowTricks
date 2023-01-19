@@ -1,6 +1,6 @@
 let collectionMovies, buttonAddMovies, spanMovies;
 
-window.onload = () => {
+document.addEventListener('DOMContentLoaded', () => {
     collectionMovies = document.querySelector("#movies");
     spanMovies = collectionMovies.querySelector("span");
 
@@ -15,7 +15,7 @@ window.onload = () => {
     buttonAddMovies.addEventListener("click", function() {
         addButtonMovies(collectionMovies);
     });
-}
+})
 
 
 function addButtonMovies(collectionMovies) {
