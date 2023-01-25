@@ -5,10 +5,12 @@
 {% block body %} 
     <h1>Modifier la figure</h1>
 
-    {% if trick.pictures %} 
 
+    {% for movie in trick.movies %}
+        {{ movie.balise | raw }}
+        <a href="" type="button">Delete</a>
+    {% endfor %}
 
-    {% endif %}
 
 
     {{ form_start(trickForm) }}

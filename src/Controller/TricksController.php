@@ -72,6 +72,12 @@ class TricksController extends AbstractController
                 $trick->addPicture($pic);
             }
 
+            foreach ($trick->getMovies() as $movie) {
+                if (!$movie->getFigure()) {
+                    $movie->setFigure($trick);
+                }
+            }
+
             $entityManager->persist($trick);
             $entityManager->flush();
     
@@ -112,13 +118,14 @@ class TricksController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setEditDate(new \DateTime());
-
-            $movies = $form->get('movies')->getData();
-
-            foreach ($movies as $movie) {
-                $movie->setName('test'); 
-                $trick->addMovie($movie);
+            
+            dd($trick);
+            foreach ($trick->getMovies() as $movie) {
+                if (!$movie->getFigure()) {
+                    $movie->setFigure($trick);
+                }
             }
+
 
             $entityManager->persist($trick);
             $entityManager->flush();

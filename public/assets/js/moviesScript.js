@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     collectionMovies = document.querySelector("#movies");
     spanMovies = collectionMovies.querySelector("span");
 
+    console.log('collectionMovies', collectionMovies);
+
     buttonAddMovies = document.createElement("button");
     buttonAddMovies.className = "add-movies btn btn-primary";
     buttonAddMovies.innerText = "Ajouter une vidéo";
@@ -20,8 +22,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function addButtonMovies(collectionMovies) {
     let prototype = collectionMovies.dataset.prototype;
+    // let countMovies = document.querySelector("#trick_form_movies").length
 
-    let index = collectionMovies.dataset.index;
+    let index = document.querySelector("#trick_form_movies").childElementCount;
+
+    console.log(index);
+    console.log(collectionMovies);
 
     prototype = prototype.replace(/__name__/g, index);
 

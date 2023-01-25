@@ -153,9 +153,7 @@ class Figure
 
     public function addMovie(Movie $movie): self
     {
-        dump('there');
-        if (!$this->movies->contains($movie) || $movie->getId() === null) {
-            dump('here');
+        if (!$this->movies->contains($movie)) {
             $this->movies->add($movie);
             $movie->setFigure($this);
         }
