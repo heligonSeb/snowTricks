@@ -6,14 +6,18 @@
 
 
     <div>
-        <img src="" alt="une image"/>
-        <img src="" alt="une image"/>
-        <img src="" alt="une image"/>
-        <img src="" alt="une image"/>
-        <img src="" alt="une image"/>
-
-        <div>video2</div>
-        <div>video3</div>
-        <div>video4</div>
+        {% for movie in trick.movies %}
+            <div>
+                {{ movie.balise | raw }}
+                <a href="" type="button">Delete</a>
+            </div>
+        {% endfor %}
+        
+        {% for picture in trick.pictures %}
+            <div>    
+                <img src="{{ asset('pictures/tricks/mini/200x200-') }}{{ picture.name }}" />
+                <a href="" type="button" class="btn btn-danger">Delete</a>
+            </div>
+        {% endfor %}
     </div>
 <section>

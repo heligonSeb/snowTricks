@@ -8,14 +8,14 @@
     {% for movie in trick.movies %}
         <div>
             {{ movie.balise | raw }}
-            <a href="" type="button">Delete</a>
+            <a href="{{ path('trick_delete_movie', {id: trick.id, movieId: movie.id}) }}" type="button" class="btn btn-danger"><i class="bi bi-trash3"></i></a>
         </div>
     {% endfor %}
     
     {% for picture in trick.pictures %}
         <div>    
             <img src="{{ asset('pictures/tricks/mini/200x200-') }}{{ picture.name }}" />
-            <a href="" type="button" class="btn btn-danger">Delete</a>
+            <a href="{{ path('trick_delete_picture', {id: trick.id, pictureId: picture.id}) }}" type="button" class="btn btn-danger"><i class="bi bi-trash3"></i></a>
         </div>
     {% endfor %}
 
