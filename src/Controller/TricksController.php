@@ -66,9 +66,6 @@ class TricksController extends AbstractController
                 $pic->setName($file);
                 $pic->setFolder($folder);
 
-                $ext = explode(".", $file);
-                $pic->setExtension($ext[1]);
-
                 $trick->addPicture($pic);
             }
 
@@ -105,7 +102,7 @@ class TricksController extends AbstractController
     }
 
     #[Route('/tricks/{id}/edit', name: "trick_edit")]
-    public function trickEdit(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, int $id): Response
+    public function trickEdit(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, int $id, PictureService $pictureService): Response
     {
         $trick = $figureRepository->find($id);
 
@@ -118,14 +115,38 @@ class TricksController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setEditDate(new \DateTime());
+
+            // get all pictures
+            $pictures = $request->files->get('trick_form')['pictures'];
+
+
+            // Clear the picture without name in trick entity
+            foreach ($trick->getPictures() as $picture) {
+                if (!$picture->getName()) {
+                    $trick->removePicture($picture);
+                }
+            } // end clear
+
+            foreach ($pictures as $picture) {
+                // set the folder
+                $folder = "tricks";
+
+                // use the picture service for add a picture
+                $file = $pictureService->add($picture['images'], $folder, 200, 200);
+
+                $pic = new Picture();
+                $pic->setName($file);
+                $pic->setFolder($folder);
+
+                
+                $trick->addPicture($pic);
+            }
             
-            dd($trick);
             foreach ($trick->getMovies() as $movie) {
                 if (!$movie->getFigure()) {
                     $movie->setFigure($trick);
                 }
             }
-
 
             $entityManager->persist($trick);
             $entityManager->flush();

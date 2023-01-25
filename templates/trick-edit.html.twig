@@ -5,22 +5,28 @@
 {% block body %} 
     <h1>Modifier la figure</h1>
 
-
     {% for movie in trick.movies %}
-        {{ movie.balise | raw }}
-        <a href="" type="button">Delete</a>
+        <div>
+            {{ movie.balise | raw }}
+            <a href="" type="button">Delete</a>
+        </div>
     {% endfor %}
-
-
+    
+    {% for picture in trick.pictures %}
+        <div>    
+            <img src="{{ asset('pictures/tricks/mini/200x200-') }}{{ picture.name }}" />
+            <a href="" type="button" class="btn btn-danger">Delete</a>
+        </div>
+    {% endfor %}
 
     {{ form_start(trickForm) }}
         <div id="pictures" data-prototype="{{ form_row(trickForm.pictures.vars.prototype)|e('html_attr') }}">
-            {{ form_row(trickForm.pictures)}}
+            {{ form_row(trickForm.pictures) }}
             <span></span>
         </div>
 
         <div id="movies" data-prototype="{{ form_row(trickForm.movies.vars.prototype)|e('html_attr') }}">
-            {{ form_row(trickForm.movies)}}
+            {{ form_row(trickForm.movies) }}
             <span></span>
         </div>
 
