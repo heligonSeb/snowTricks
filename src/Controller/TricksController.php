@@ -2,13 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Figure;
 use App\Entity\Picture;
+use App\Form\CommentFormType;
 use App\Form\TrickFormType;
 use App\Repository\FigureGroupRepository;
 use App\Repository\FigureRepository;
 use App\Repository\MovieRepository;
 use App\Repository\PictureRepository;
+use App\Repository\CommentRepository;
 use App\Service\PictureService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class TricksController extends AbstractController
 {
     private $params;
+    private $security;
 
     public function __construct(ParameterBagInterface $params)
     {
@@ -86,20 +90,38 @@ class TricksController extends AbstractController
         return $this->render('add-trick.html.twig', ['trickForm' => $form->createView()]);
     }
 
-    #[Route('/tricks/{id}', name: "trick", methods: ['GET'])]
-    public function trick(FigureRepository $figureRepository, FigureGroupRepository $figureGroupRepository, int $id): Response
+    #[Route('/tricks/{id}', name: "trick", methods:["GET", "POST"])]
+    public function trick(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, FigureGroupRepository $figureGroupRepository, CommentRepository $commentRespository, int $id): Response
     {
         $trick = $figureRepository->find($id);
 
         if (!$trick) {
             return $this->render('error.html.twig');
         }
-
+        
+        $comment= new Comment();
+        $commentForm = $this->createForm(CommentFormType::class, $comment);
+        $commentForm->handleRequest($request);
+        
         $trickGroup = $figureGroupRepository->find($trick->getFigureGroup());
+        
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+            $comment->setCreateDate(new \DateTime());
+
+            $user = $this->security->getUser();
+
+            $comment->setUser($user->getId());
+            
+            $entityManager->persist($comment);
+            $entityManager->flush();
+        }
 
         return $this->render('trick.html.twig', [
             'trick' => $trick,
-            'trickGroup' => $trickGroup
+            'trickGroup' => $trickGroup,
+            'commentForm' => $commentForm->createView()
         ]);
     }
 
@@ -119,8 +141,14 @@ class TricksController extends AbstractController
             $trick->setEditDate(new \DateTime());
 
             // get all pictures
-            $pictures = $request->files->get('trick_form')['pictures'];
+            $trickForm = $request->files->get('trick_form');
 
+            
+            if ($trickForm) {
+                $pictures = $trickForm['pictures'];
+            } else {
+                $pictures = [];
+            }
 
             // Clear the picture without name in trick entity
             foreach ($trick->getPictures() as $picture) {
@@ -130,6 +158,11 @@ class TricksController extends AbstractController
             } // end clear
 
             foreach ($pictures as $picture) {
+
+                if ($picture['images'] === null) {
+                    continue;
+                }
+
                 // set the folder
                 $folder = "tricks";
 
@@ -179,7 +212,7 @@ class TricksController extends AbstractController
     }
 
     #[Route('/tricks/{id}/picture/{pictureId}/delete', name: "trick_delete_picture")]
-    public function trickDeletePicture(FigureRepository $figureRepository, PictureRepository $pictureRepository, EntityManagerInterface $entityManager, Request $request, int $id, int $pictureId): Response 
+    public function trickDeletePicture(FigureRepository $figureRepository, PictureRepository $pictureRepository, EntityManagerInterface $entityManager, Request $request, PictureService $pictureService, int $id, int $pictureId): Response 
     {
         $route = $request->headers->get('referer');
 
@@ -190,6 +223,12 @@ class TricksController extends AbstractController
         }
 
         $picture = $pictureRepository->find($pictureId); 
+
+        $removePcitureFile = $pictureService->delete($picture->getName(), "tricks", 200, 200);
+
+        if (!$removePcitureFile) {
+            return $this->render('error.html.twig');
+        }
 
         $trick->removePicture($picture);
 

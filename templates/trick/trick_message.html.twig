@@ -1,10 +1,11 @@
 <section>
-    <form>
-        <label for="commentaire" hidden></label>
-        <input type="text" name="commentaire" id="commentaire">
 
-        <button type="submite">Leave a comment</button>
-    <form>
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+    {{ form_start(commentForm) }}
+        {{ form_row(commentForm.message) }}
+    {{ form_end(commentForm) }}
+
+{% endif %}
 
 
     <div>

@@ -90,7 +90,7 @@ class PictureService
     {
         if($fichier !== 'default.jpeg'){
             $success = false;
-            $path = $this->params->get('images_directory') . $folder;
+            $path = $this->params->get('pictures_directory') . $folder;
 
             $mini = $path . '/mini/' . $width . 'x' . $height . '-' . $fichier;
 

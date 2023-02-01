@@ -4,8 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     collectionMovies = document.querySelector("#movies");
     spanMovies = collectionMovies.querySelector("span");
 
-    console.log('collectionMovies', collectionMovies);
-
     buttonAddMovies = document.createElement("button");
     buttonAddMovies.className = "add-movies btn btn-primary";
     buttonAddMovies.innerText = "Ajouter une vidéo";
