@@ -3,47 +3,17 @@
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
     {{ form_start(commentForm) }}
         {{ form_row(commentForm.message) }}
+
+        <button type="submit" class="btn btn-primary">
+            leave message
+        </button>
     {{ form_end(commentForm) }}
 
 {% endif %}
 
-
-    <div>
-        <div>
-            <img src="" alt="imageperso">
-
-            <div>
-                Le message
-            <div>
-        </div>
-
-        <div>
-            <img src="" alt="imageperso">
-
-            <div>
-                Le message
-            <div>
-        </div>
-
-        <div>
-            <img src="" alt="imageperso">
-
-            <div>
-                Le message
-            <div>
-        </div>
-
-        <div>
-            <img src="" alt="imageperso">
-
-            <div>
-                Le message
-            <div>
-        </div>
-
-
-        <button type="button">Load more</button>
-    </div>
+{% for comment in allComment %}
+    {{ comment.message }}
+{% endfor %}
 
 
 </section>

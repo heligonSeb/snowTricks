@@ -23,7 +23,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class TricksController extends AbstractController
 {
     private $params;
-    private $security;
 
     public function __construct(ParameterBagInterface $params)
     {
@@ -110,18 +109,22 @@ class TricksController extends AbstractController
 
             $comment->setCreateDate(new \DateTime());
 
-            $user = $this->security->getUser();
+            $user = $this->getUser();
 
-            $comment->setUser($user->getId());
+            $comment->setUser($user);
+            $comment->setFigure($trick);
             
             $entityManager->persist($comment);
             $entityManager->flush();
         }
 
+        $allComment = $commentRespository->findBy(['figure' => $trick]);
+
         return $this->render('trick.html.twig', [
             'trick' => $trick,
             'trickGroup' => $trickGroup,
-            'commentForm' => $commentForm->createView()
+            'commentForm' => $commentForm->createView(),
+            'allComment' => $allComment
         ]);
     }
 

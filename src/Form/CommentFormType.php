@@ -20,10 +20,6 @@ class CommentFormType extends AbstractType
                     'class' => 'form-control',
                 ],
             ])
-            ->add('save', SubmitType::class, [
-                'label' => "leave a message",
-                'attr' => ['class' => 'btn btn-primary'],
-            ]);
         ;
     }
 
