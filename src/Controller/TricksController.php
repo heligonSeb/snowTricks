@@ -104,6 +104,10 @@ class TricksController extends AbstractController
         
         $trickGroup = $figureGroupRepository->find($trick->getFigureGroup());
         
+        // $allComment = $commentRespository->findBy(['figure' => $trick]);
+        $page = $request->query->getInt('page', 1);
+        $allComment = $commentRespository->getCommentPaginated($page, 5, $trick);
+
         if ($commentForm->isSubmitted() && $commentForm->isValid()) {
             $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -116,9 +120,9 @@ class TricksController extends AbstractController
             
             $entityManager->persist($comment);
             $entityManager->flush();
-        }
 
-        $allComment = $commentRespository->findBy(['figure' => $trick]);
+            return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
+        }
 
         return $this->render('trick.html.twig', [
             'trick' => $trick,

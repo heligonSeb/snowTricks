@@ -1,27 +1,30 @@
-<section class="d-flex justify-content-between align-items-center">
-
+<section class="row g-4">
 	{% for trick in tricks %}
-		<div class="card" style="width: 18rem;">
-			<img src="https://img.redbull.com/images/c_limit,w_100,h_500,f_auto,q_auto/redbullcom/2017/11/28/e4340b97-ee44-4756-9161-4fddb1a1673b/28-winters-nitro-knut-eliassen-carving" class="card-img-top" alt="..." >
+		<div class="col col-md-6 col-xl-4 col-xxl-3">
+			<div class="card" style="width: 18rem;">
+				<img src="https://img.redbull.com/images/c_limit,w_100,h_500,f_auto,q_auto/redbullcom/2017/11/28/e4340b97-ee44-4756-9161-4fddb1a1673b/28-winters-nitro-knut-eliassen-carving" class="card-img-top" alt="..." >
 
-			<div class="card-body">
-				<h5 class="card-title">{{ trick.name|title }}</h5>
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-center">
+						<h5 class="card-title">{{ trick.name|title }}</h5>
 
-				<div class="fw-lighter">
-					{{trick.description|u.truncate(50, '...')}}
-				</div>
+						<div>
+							<a href="{{ path('trick_edit', {id: trick.id}) }}" class="btn btn-success">
+								<i class="bi bi-pencil-square"></i>
+							</a>
 
-				<div>
-					<a href="{{ path('trick_edit', {id: trick.id}) }}" class="btn btn-success">
-						<i class="bi bi-pencil-square"></i>
-					</a>
+							<a href="{{ path('trick_delete', {id: trick.id}) }}" class="btn btn-danger">
+								<i class="bi bi-trash3"></i>
+							</a>
+						</div>
+					</div>
 
-					<a href="{{ path('trick_delete', {id: trick.id}) }}" class="btn btn-danger">
-						<i class="bi bi-trash3"></i>
-					</a>
+					<div class="fw-lighter mt-2">
+						{{trick.description|u.truncate(50, '...')}}
+					</div>
+
 				</div>
 			</div>
-		</div>
+		</div>	
 	{% endfor %}
-
 </section>

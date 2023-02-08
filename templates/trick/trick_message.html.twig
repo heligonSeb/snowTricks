@@ -11,9 +11,17 @@
 
 {% endif %}
 
-{% for comment in allComment %}
+{% for comment in allComment.data %}
     {{ comment.message }}
 {% endfor %}
+
+{% set path = 'trick' %}
+{% set trickId = trick.id %}
+{% set pages = allComment.pages %}
+{% set currentPage = allComment.page %}
+
+{% include "pagination.html.twig" %}
+
 
 
 </section>
