@@ -56,11 +56,9 @@ class CommentRepository extends ServiceEntityRepository
             ->setMaxResults($limit)
             ->setFirstResult(($page * $limit) - $limit);
 
-            
         $paginator = new Paginator($q);
         
         $data = $paginator->getQuery()->getResult();
-        dump($data);
 
         if (empty($data)) {
             return $result;
