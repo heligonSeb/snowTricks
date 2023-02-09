@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\MovieRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
@@ -13,10 +14,7 @@ class Movie
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 200)]
-    private ?string $name = null;
-
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(type: Types::TEXT)]
     private ?string $balise = null;
 
     #[ORM\ManyToOne(inversedBy: 'movies')]
@@ -26,18 +24,6 @@ class Movie
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     public function getBalise(): ?string

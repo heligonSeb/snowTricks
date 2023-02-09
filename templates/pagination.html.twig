@@ -1,0 +1,27 @@
+{% if pages > 1 %}
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination pagination-sm justify-content-center">
+            <li class="page-item {{ (currentPage < 2) ? 'disabled' : '' }}">
+                <a href="{{ path(path, {id: trickId, page: currentPage - 1}) }}" class="page-link">Previous</a>
+            </li>
+
+
+            {% for page in 1..pages %}
+                <li class="page-item {{ (currentPage == page) ? 'active' : '' }}">
+                    <a class="page-link" href="{{ path(path, {id: trickId, page: page}) }}">{{ page }}</a>
+                </li>
+            {% endfor %}
+
+            <li class="page-item {{ (currentPage >= pages) ? 'disabled' : '' }}">
+                <a href="{{ path(path, {id: trickId, page: currentPage + 1}) }}" class="page-link" href="#">Next</a>
+            </li>
+        </ul>
+    </nav>
+
+{% endif %}
+
+
+
+
+

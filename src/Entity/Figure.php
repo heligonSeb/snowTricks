@@ -28,17 +28,17 @@ class Figure
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'figures')]
     #[ORM\JoinColumn(nullable: false)]
     private ?FigureGroup $figureGroup = null;
 
     #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
-    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Movie::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Movie::class, orphanRemoval: true, cascade: ["persist"])]
     private Collection $movies;
 
-    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Picture::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: 'figure', targetEntity: Picture::class,  orphanRemoval: true, cascade: ["persist"])]
     private Collection $pictures;
 
     public function __construct()

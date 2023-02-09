@@ -16,9 +16,6 @@ class Picture
     #[ORM\Column(length: 200)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 10)]
-    private ?string $extension = null;
-
     #[ORM\Column(length: 150)]
     private ?string $folder = null;
 
@@ -38,18 +35,6 @@ class Picture
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    public function getExtension(): ?string
-    {
-        return $this->extension;
-    }
-
-    public function setExtension(string $extension): self
-    {
-        $this->extension = $extension;
 
         return $this;
     }

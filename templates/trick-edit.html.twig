@@ -5,19 +5,54 @@
 {% block body %} 
     <h1>Modifier la figure</h1>
 
+    {% for movie in trick.movies %}
+        <div>
+            {{ movie.balise | raw }}
+            <a href="{{ path('trick_delete_movie', {id: trick.id, movieId: movie.id}) }}" type="button" class="btn btn-danger"><i class="bi bi-trash3"></i></a>
+        </div>
+    {% endfor %}
+    
+    {% for picture in trick.pictures %}
+        <div>    
+            <img src="{{ asset('pictures/tricks/mini/200x200-') }}{{ picture.name }}" />
+            <a href="{{ path('trick_delete_picture', {id: trick.id, pictureId: picture.id}) }}" type="button" class="btn btn-danger"><i class="bi bi-trash3"></i></a>
+        </div>
+    {% endfor %}
+
     {{ form_start(trickForm) }}
+        <div id="pictures" data-prototype="{{ form_row(trickForm.pictures.vars.prototype)|e('html_attr') }}">
+            {{ form_row(trickForm.pictures) }}
+            <span></span>
+        </div>
+
+        <div id="movies" data-prototype="{{ form_row(trickForm.movies.vars.prototype)|e('html_attr') }}">
+            {{ form_row(trickForm.movies) }}
+            <span></span>
+        </div>
+
         {{ form_row(trickForm.name) }}
         {{ form_row(trickForm.description) }}
         {{ form_row(trickForm.figureGroup) }}
 
         <div>
+            <button type="submite" class="btn btn-success">
+                <i class="bi bi-save"></i>
+                Enregistrer
+            </button>
+
             <a class="btn btn-danger" href="{{ path('trick_delete', {id: trick.id}) }}">
+                <i class="bi bi-trash3"></i>
                 Delete
             </a>
 
-            <button type="submite" class="btn btn-success">Enregistrer</button>
         <div>
     {{ form_end(trickForm) }}
 
 
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('assets/js/script.js') }}"></script>
+    <script src="{{ asset('assets/js/picturesScript.js') }}"></script>
+    <script src="{{ asset('assets/js/moviesScript.js') }}"></script>
 {% endblock %}

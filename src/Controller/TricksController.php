@@ -2,11 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Figure;
 use App\Entity\Picture;
+use App\Form\CommentFormType;
 use App\Form\TrickFormType;
 use App\Repository\FigureGroupRepository;
 use App\Repository\FigureRepository;
+use App\Repository\MovieRepository;
+use App\Repository\PictureRepository;
+use App\Repository\CommentRepository;
 use App\Service\PictureService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -66,10 +71,13 @@ class TricksController extends AbstractController
                 $pic->setName($file);
                 $pic->setFolder($folder);
 
-                $ext = explode(".", $file);
-                $pic->setExtension($ext[1]);
-
                 $trick->addPicture($pic);
+            }
+
+            foreach ($trick->getMovies() as $movie) {
+                if (!$movie->getFigure()) {
+                    $movie->setFigure($trick);
+                }
             }
 
             $entityManager->persist($trick);
@@ -81,25 +89,50 @@ class TricksController extends AbstractController
         return $this->render('add-trick.html.twig', ['trickForm' => $form->createView()]);
     }
 
-    #[Route('/tricks/{id}', name: "trick", methods: ['GET'])]
-    public function trick(FigureRepository $figureRepository, FigureGroupRepository $figureGroupRepository, int $id): Response
+    #[Route('/tricks/{id}', name: "trick", methods:["GET", "POST"])]
+    public function trick(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, FigureGroupRepository $figureGroupRepository, CommentRepository $commentRespository, int $id): Response
     {
         $trick = $figureRepository->find($id);
 
         if (!$trick) {
             return $this->render('error.html.twig');
         }
-
+        
+        $comment= new Comment();
+        $commentForm = $this->createForm(CommentFormType::class, $comment);
+        $commentForm->handleRequest($request);
+        
         $trickGroup = $figureGroupRepository->find($trick->getFigureGroup());
+        
+        if ($commentForm->isSubmitted() && $commentForm->isValid()) {
+            $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+            $comment->setCreateDate(new \DateTime());
+
+            $user = $this->getUser();
+            
+            $comment->setUser($user);
+            $comment->setFigure($trick);
+            
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            
+            return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
+        }
+
+        $page = $request->query->getInt('page', 1);
+        $allComment = $commentRespository->getCommentPaginated($page, 5, $trick);
 
         return $this->render('trick.html.twig', [
             'trick' => $trick,
-            'trickGroup' => $trickGroup
+            'trickGroup' => $trickGroup,
+            'commentForm' => $commentForm->createView(),
+            'allComment' => $allComment
         ]);
     }
 
     #[Route('/tricks/{id}/edit', name: "trick_edit")]
-    public function trickEdit(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, int $id): Response
+    public function trickEdit(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, int $id, PictureService $pictureService): Response
     {
         $trick = $figureRepository->find($id);
 
@@ -112,6 +145,49 @@ class TricksController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setEditDate(new \DateTime());
+
+            // get all pictures
+            $trickForm = $request->files->get('trick_form');
+
+            
+            if ($trickForm) {
+                $pictures = $trickForm['pictures'];
+            } else {
+                $pictures = [];
+            }
+
+            // Clear the picture without name in trick entity
+            foreach ($trick->getPictures() as $picture) {
+                if (!$picture->getName()) {
+                    $trick->removePicture($picture);
+                }
+            } // end clear
+
+            foreach ($pictures as $picture) {
+
+                if ($picture['images'] === null) {
+                    continue;
+                }
+
+                // set the folder
+                $folder = "tricks";
+
+                // use the picture service for add a picture
+                $file = $pictureService->add($picture['images'], $folder, 200, 200);
+
+                $pic = new Picture();
+                $pic->setName($file);
+                $pic->setFolder($folder);
+
+                
+                $trick->addPicture($pic);
+            }
+            
+            foreach ($trick->getMovies() as $movie) {
+                if (!$movie->getFigure()) {
+                    $movie->setFigure($trick);
+                }
+            }
 
             $entityManager->persist($trick);
             $entityManager->flush();
@@ -140,4 +216,51 @@ class TricksController extends AbstractController
 
         return $this->redirectToRoute('all_tricks');
     }
+
+    #[Route('/tricks/{id}/picture/{pictureId}/delete', name: "trick_delete_picture")]
+    public function trickDeletePicture(FigureRepository $figureRepository, PictureRepository $pictureRepository, EntityManagerInterface $entityManager, Request $request, PictureService $pictureService, int $id, int $pictureId): Response 
+    {
+        $route = $request->headers->get('referer');
+
+        $trick = $figureRepository->find($id);
+
+        if (!$trick) {
+            return $this->render('error.html.twig');
+        }
+
+        $picture = $pictureRepository->find($pictureId); 
+
+        $removePcitureFile = $pictureService->delete($picture->getName(), "tricks", 200, 200);
+
+        if (!$removePcitureFile) {
+            return $this->render('error.html.twig');
+        }
+
+        $trick->removePicture($picture);
+
+        $entityManager->flush();
+
+        return $this->redirect($route);
+    }
+
+    #[Route('/tricks/{id}/movie/{movieId}/delete', name: "trick_delete_movie")]
+    public function trickDeleteMovie(FigureRepository $figureRepository, MovieRepository $movieRepository, EntityManagerInterface $entityManager, Request $request, int $id, int $movieId): Response 
+    {
+        $route = $request->headers->get('referer');
+
+        $trick = $figureRepository->find($id);
+
+        if (!$trick) {
+            return $this->render('error.html.twig');
+        }
+
+        $movie = $movieRepository->find($movieId); 
+
+        $trick->removeMovie($movie);
+        $entityManager->flush();
+
+        return $this->redirect($route);
+    }
+
+
 }

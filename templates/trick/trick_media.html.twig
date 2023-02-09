@@ -6,14 +6,16 @@
 
 
     <div>
-        <img src="" alt="une image"/>
-        <img src="" alt="une image"/>
-        <img src="" alt="une image"/>
-        <img src="" alt="une image"/>
-        <img src="" alt="une image"/>
-
-        <div>video2</div>
-        <div>video3</div>
-        <div>video4</div>
+        {% for movie in trick.movies %}
+            <div>
+                {{ movie.balise | raw }}
+            </div>
+        {% endfor %}
+        
+        {% for picture in trick.pictures %}
+            <div>    
+                <img src="{{ asset('pictures/tricks/mini/200x200-') }}{{ picture.name }}" />
+            </div>
+        {% endfor %}
     </div>
 <section>

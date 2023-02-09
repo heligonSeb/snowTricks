@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Comment;
+use App\Entity\Figure;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -37,6 +39,39 @@ class CommentRepository extends ServiceEntityRepository
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+    }
+
+
+    public function getCommentPaginated(int $page, int $limit,Figure $figure): array
+    {
+        $limit = abs($limit);
+
+        $result = [];
+
+        $q = $this->getEntityManager()->createQueryBuilder()
+            ->select('c')
+            ->from(Comment::class, 'c')
+            ->where('c.figure = :figure')
+            ->setParameter('figure', $figure)
+            ->setMaxResults($limit)
+            ->setFirstResult(($page * $limit) - $limit);
+
+        $paginator = new Paginator($q);
+        
+        $data = $paginator->getQuery()->getResult();
+
+        if (empty($data)) {
+            return $result;
+        }
+
+        $pages = ceil($paginator->count() / $limit);
+
+        $result['data'] = $data;
+        $result['pages'] = $pages;
+        $result['page'] = $page;
+        $result['limit'] = $limit;
+        
+        return $result;
     }
 
 //    /**
