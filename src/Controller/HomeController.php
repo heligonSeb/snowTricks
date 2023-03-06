@@ -18,8 +18,10 @@ class HomeController extends AbstractController
     #[Route('/', name: "app_home", methods: ['GET'])]
     public function index(FigureRepository $tricksRepo): Response
     {
+        $tricks = $tricksRepo->findAll();
+
         return $this->render('home/home.html.twig', [
-            'tricks' => $tricksRepo->findAll()
+            'tricks' => $tricks
         ]);
     }
 

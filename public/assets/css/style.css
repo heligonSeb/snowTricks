@@ -1,0 +1,8 @@
+/**
+        Home
+**/
+#intro {
+    background-image: url('../../pictures/intro.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
