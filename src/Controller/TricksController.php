@@ -30,9 +30,11 @@ class TricksController extends AbstractController
     }
 
     #[Route('/tricks', name: "all_tricks", methods: ['GET'])]
-    public function tricksList(): Response
+    public function tricksList(FigureRepository $tricksRepo): Response
     {
-        return $this->render('all-tricks.html.twig');
+        return $this->render('all-tricks.html.twig', [
+            'tricks' => $tricksRepo->findAll()
+        ]);
     }
 
     #[Route('/tricks/add', name: "add_trick", methods:["GET", "POST"])]
