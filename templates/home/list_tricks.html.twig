@@ -1,7 +1,7 @@
-<section class="row g-4 pb-4">
+<section class="row g-4 mt-2 mb-4">
 	{% for trick in tricks %}
-		<div class="col col-md-6 col-xl-4 col-xxl-3">
-			<div class="card" style="width: 18rem;">
+		<div class="col-md-4 col-sm-6 col-lg-3">
+			<div class="card w-100 h-100">
 				{% set picture = trick.pictures|first %}
 				{% if picture %}
 					<img src="{{ asset('pictures/tricks/mini/200x200-') }}{{ picture.name }}" class="card-img-top" alt="..." >
@@ -11,10 +11,14 @@
 
 				<div class="card-body">
 					<div class="d-flex justify-content-between align-items-center">
-						<h5 class="card-title">{{ trick.name|title }}</h5>
+						<h5 class="card-title mb-0">
+							<a href="{{ path('trick', {id: trick.id}) }}" class="stretched-link text-decoration-none text-dark">
+								{{ trick.name|title }}
+							</a>
+						</h5>
 
-						<div>
-							<a href="{{ path('trick_edit', {id: trick.id}) }}" class="btn btn-success" title="Modifer">
+						<div class="d-flex justify-content-end">
+							<a href="{{ path('trick_edit', {id: trick.id}) }}" class="btn btn-success me-1" title="Modifer">
 								<i class="bi bi-pencil-square"></i>
 							</a>
 

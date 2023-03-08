@@ -1,21 +1,31 @@
-<section>
+<section class="my-4">
+    <div class="text-center my-2 d-md-none">
+        <button class="btn btn-secondary col-12 col-md-6 see-more" type="button">Voir les médias</button>
+    </div>
 
-    <div>
-        <button type="button">See medias</button>
-    <div>
+    <div class="div-media-collapse d-none d-md-block">
+        {% if trick.movies|length %}
+            <h2 class="h4 text-secondary border-bottom border-3 border-secondary">Vidéo:</h2>
 
-
-    <div>
-        {% for movie in trick.movies %}
-            <div>
-                {{ movie.balise | raw }}
+            <div class="d-flex justify-content-start align-items-center flex-wrap">
+                {% for movie in trick.movies %}
+                    <div class="mx-1">
+                        {{ movie.balise | raw }}
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        {% endif %}
         
-        {% for picture in trick.pictures %}
-            <div>    
-                <img src="{{ asset('pictures/tricks/mini/200x200-') }}{{ picture.name }}" />
+        {% if trick.pictures|length %}
+            <h2 class="h4 text-secondary border-bottom border-3 border-secondary">Images:</h2>
+
+            <div class="d-flex justify-content-start align-items-center flex-wrap">
+                {% for picture in trick.pictures %}
+                    <div class="mx-1">    
+                        <img src="{{ asset('pictures/tricks/mini/200x200-') }}{{ picture.name }}" />
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
+        {% endif %}
     </div>
 <section>
