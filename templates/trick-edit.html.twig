@@ -5,7 +5,7 @@
 {% block body %} 
     <h1>Modifier la figure</h1>
 
-    {% for movie in trick.movies %}
+    {# {% for movie in trick.movies %}
         <div>
             {{ movie.balise | raw }}
             <a href="{{ path('trick_delete_movie', {id: trick.id, movieId: movie.id}) }}" type="button" class="btn btn-danger"><i class="bi bi-trash3"></i></a>
@@ -17,7 +17,9 @@
             <img src="{{ asset('pictures/tricks/mini/200x200-') }}{{ picture.name }}" />
             <a href="{{ path('trick_delete_picture', {id: trick.id, pictureId: picture.id}) }}" type="button" class="btn btn-danger"><i class="bi bi-trash3"></i></a>
         </div>
-    {% endfor %}
+    {% endfor %} #}
+
+    {% include '/trick/edit/trick_edit_media.html.twig' %}
 
     {{ form_start(trickForm) }}
         <div id="pictures" data-prototype="{{ form_row(trickForm.pictures.vars.prototype)|e('html_attr') }}">
@@ -34,13 +36,13 @@
         {{ form_row(trickForm.description) }}
         {{ form_row(trickForm.figureGroup) }}
 
-        <div>
-            <button type="submite" class="btn btn-success">
+        <div class="row gx-5">
+            <button type="submite" class="btn btn-success col-12 col-md">
                 <i class="bi bi-save"></i>
                 Enregistrer
             </button>
 
-            <a class="btn btn-danger" href="{{ path('trick_delete', {id: trick.id}) }}">
+            <a class="btn btn-danger col-12 col-md" href="{{ path('trick_delete', {id: trick.id}) }}">
                 <i class="bi bi-trash3"></i>
                 Delete
             </a>
@@ -52,7 +54,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('assets/js/script.js') }}"></script>
+    {{ parent() }}
     <script src="{{ asset('assets/js/picturesScript.js') }}"></script>
     <script src="{{ asset('assets/js/moviesScript.js') }}"></script>
 {% endblock %}
