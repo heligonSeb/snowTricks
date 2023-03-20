@@ -37,7 +37,7 @@
 
 
 {% block javascripts %}
-    <script src="{{ asset('assets/js/script.js') }}"></script>
+    {{ parent() }}
     <script src="{{ asset('assets/js/picturesScript.js') }}"></script>
     <script src="{{ asset('assets/js/moviesScript.js') }}"></script>
 {% endblock %}

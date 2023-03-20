@@ -5,8 +5,9 @@
 {% block body %} 
 
     <div class="container">
-        <section id="intro" class="text-center py-4">
-            <h1 class="fw-light text-primary">To snow or not to snow that is not a question<h1>
+        <section class="d-flex justify-content-center align-items-center position-relative">
+            <img src="{{ asset('pictures/intro.jpg') }}" class="img-fluid w-100" alt="pictures intro">
+            <h1 class="text-center text-white text-shadow text-uppercase position-absolute">To snow or not to snow that is not a question!<h1>
         </section>
 
         {% include '/home/list_tricks.html.twig' %}

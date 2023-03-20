@@ -1,26 +1,48 @@
-<section>
+<section class="my-2">
 
 {% if is_granted('IS_AUTHENTICATED_FULLY') %}
     {{ form_start(commentForm) }}
         {{ form_row(commentForm.message) }}
 
-        <button type="submit" class="btn btn-primary">
-            leave message
-        </button>
+        <div class="text-center mb-4">
+            <button type="submit" class="btn btn-primary col-12 col-md-6">
+                laisser un commentaire
+            </button>
+        </div>
     {{ form_end(commentForm) }}
 
 {% endif %}
 
-{% for comment in allComment.data %}
-    {{ comment.message }}
-{% endfor %}
+{% if allComment %}
+        <div class="card mb-3">
+            <ul class="list-group list-group-flush">
+                <div class="card-header fw-bold">
+                    Zone des commentaires:
+                </div>
+                
+                {% for comment in allComment.data %}
 
-{% set path = 'trick' %}
-{% set trickId = trick.id %}
-{% set pages = allComment.pages %}
-{% set currentPage = allComment.page %}
+                    <li class="list-group-item">
+                        <div class="fw-bold text-secondary fst-italic">Ecrie par: {{ comment.user.lastname }} {{ comment.user.firstname}}</div>
+                        <div class="fw-lighter">{{ comment.message }}</div>
+                    </li>
 
-{% include "pagination.html.twig" %}
+                {% endfor %}
+            </ul>
+        </div>
+
+    {% set path = 'trick' %}
+    {% set trickId = trick.id %}
+    {% set pages = allComment.pages %}
+    {% set currentPage = allComment.page %}
+
+    {% include "pagination.html.twig" %}
+{% else %}
+    <div class="alert alert-info mt-2" role="alert">
+        Aucun commentaire trouvé
+    </div>
+
+{% endif %}
 
 
 

@@ -136,6 +136,8 @@ class TricksController extends AbstractController
     #[Route('/tricks/{id}/edit', name: "trick_edit")]
     public function trickEdit(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, int $id, PictureService $pictureService): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $trick = $figureRepository->find($id);
 
         if (!$trick) {
@@ -207,6 +209,8 @@ class TricksController extends AbstractController
     #[Route('/tricks/{id}/delete', name: "trick_delete", methods: ['GET'])]
     public function trickDelete(FigureRepository $figureRepository, EntityManagerInterface $entityManager, int $id): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $trick = $figureRepository->find($id);
 
         if (!$trick) {
@@ -222,6 +226,8 @@ class TricksController extends AbstractController
     #[Route('/tricks/{id}/picture/{pictureId}/delete', name: "trick_delete_picture")]
     public function trickDeletePicture(FigureRepository $figureRepository, PictureRepository $pictureRepository, EntityManagerInterface $entityManager, Request $request, PictureService $pictureService, int $id, int $pictureId): Response 
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $route = $request->headers->get('referer');
 
         $trick = $figureRepository->find($id);
@@ -248,6 +254,8 @@ class TricksController extends AbstractController
     #[Route('/tricks/{id}/movie/{movieId}/delete', name: "trick_delete_movie")]
     public function trickDeleteMovie(FigureRepository $figureRepository, MovieRepository $movieRepository, EntityManagerInterface $entityManager, Request $request, int $id, int $movieId): Response 
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        
         $route = $request->headers->get('referer');
 
         $trick = $figureRepository->find($id);
