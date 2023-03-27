@@ -16,7 +16,9 @@
             <div class="d-flex justify-content-start align-items-center flex-wrap">
                 {% for movie in trick.movies %}
                     <div class="mx-1">
-                        {{ movie.balise | raw }}
+                    {% autoescape false %}
+                        {{ movie.balise }}
+                    {% endautoescape %}
                     </div>
                 {% endfor %}
             </div>

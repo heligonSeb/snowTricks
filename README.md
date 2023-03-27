@@ -20,6 +20,11 @@ Pour implémenter ces fonctionnalités, j'ai créé les pages suivantes :
 ```shell
 mysql -u [user] -p -e "CREATE DATABASE snowtricks;"
 ```
+### Installation des dépendances
+```shell
+composer install
+```
+
 ### Création des tables
 ```shell
 symfony console doctrime:schema:update
@@ -30,13 +35,9 @@ symfony console doctrime:schema:update
 mysql -u root snowtricks -p < sql/addData.sql
 ```
 
-### Installation des dépendances
-```shell
-composer install
-```
 
 ## Configuration du projet
-Pour configurer le projet il suffit de copier le fichier ".env.exemple.local" qui se trouve a la racine du projet. 
+Pour configurer le projet il suffit de copier le fichier ".env.exemple" qui se trouve a la racine du projet. 
 Puis de venir compléter les informations à l'intérieur par vos informations et de renomer le fichier en ".env.dev.local".
 
 ## Lancement du serveur en local
