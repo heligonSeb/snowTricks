@@ -84,14 +84,15 @@ class TricksController extends AbstractController
 
             $entityManager->persist($trick);
             $entityManager->flush();
-    
+
+            $this->addFlash('success', 'La figure a bien été créée');
             return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
         }
     
         return $this->render('add-trick.html.twig', ['trickForm' => $form->createView()]);
     }
 
-    #[Route('/tricks/{id}', name: "trick", methods:["GET", "POST"])]
+    #[Route('/tricks/{id}', name: "trick", methods:["GET", "POST"], requirements: ['id' => '\d+'])]
     public function trick(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, FigureGroupRepository $figureGroupRepository, CommentRepository $commentRespository, int $id): Response
     {
         $trick = $figureRepository->find($id);
@@ -133,7 +134,7 @@ class TricksController extends AbstractController
         ]);
     }
 
-    #[Route('/tricks/{id}/edit', name: "trick_edit")]
+    #[Route('/tricks/{id}/edit', name: "trick_edit", requirements: ['id' => '\d+'])]
     public function trickEdit(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, int $id, PictureService $pictureService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -149,6 +150,12 @@ class TricksController extends AbstractController
         
         if ($form->isSubmitted() && $form->isValid()) {
             $trick->setEditDate(new \DateTime());
+
+            $findMatch = $figureRepository->findOneBy(array('name' => $trick->getName()));
+
+            if ($findMatch && $id != $findMatch->getId()) {
+                return $this->render('error.html.twig');
+            }
 
             // get all pictures
             $trickForm = $request->files->get('trick_form');
@@ -196,6 +203,7 @@ class TricksController extends AbstractController
             $entityManager->persist($trick);
             $entityManager->flush();
 
+            $this->addFlash('success', 'La figure a bien été modifiée');
             return $this->redirectToRoute('trick', ['id' => $trick->getId()]);
         }
 
@@ -206,7 +214,7 @@ class TricksController extends AbstractController
     }
 
 
-    #[Route('/tricks/{id}/delete', name: "trick_delete", methods: ['GET'])]
+    #[Route('/tricks/{id}/delete', name: "trick_delete", methods: ['GET'], requirements: ['id' => '\d+'])]
     public function trickDelete(FigureRepository $figureRepository, EntityManagerInterface $entityManager, int $id): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -220,10 +228,11 @@ class TricksController extends AbstractController
         $entityManager->remove($trick);
         $entityManager->flush();
 
+        $this->addFlash('success', 'La figure a bien été supprimée');
         return $this->redirectToRoute('all_tricks');
     }
 
-    #[Route('/tricks/{id}/picture/{pictureId}/delete', name: "trick_delete_picture")]
+    #[Route('/tricks/{id}/picture/{pictureId}/delete', name: "trick_delete_picture", requirements: ['id' => '\d+', 'pictureId' => '\d+'])]
     public function trickDeletePicture(FigureRepository $figureRepository, PictureRepository $pictureRepository, EntityManagerInterface $entityManager, Request $request, PictureService $pictureService, int $id, int $pictureId): Response 
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
@@ -251,7 +260,7 @@ class TricksController extends AbstractController
         return $this->redirect($route);
     }
 
-    #[Route('/tricks/{id}/movie/{movieId}/delete', name: "trick_delete_movie")]
+    #[Route('/tricks/{id}/movie/{movieId}/delete', name: "trick_delete_movie", requirements: ['id' => '\d+', 'movieId' => '\d+'])]
     public function trickDeleteMovie(FigureRepository $figureRepository, MovieRepository $movieRepository, EntityManagerInterface $entityManager, Request $request, int $id, int $movieId): Response 
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');

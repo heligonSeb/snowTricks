@@ -15,7 +15,7 @@ class PictureService
         $this->params = $params;
     }
 
-    public function add(UploadedFile $picture, ?string $folder = '', ?int $width = 250, ?int $height = 250)
+    public function add(UploadedFile $picture, ?string $folder = '', ?int $width = 250, ?int $height = 250): string
     {
         // Change the name of the picture
         $fichier = md5(uniqid(rand(), true)) . '.jpeg';
@@ -86,7 +86,7 @@ class PictureService
         return $fichier;
     }
 
-    public function delete(string $fichier, ?string $folder = '', ?int $width = 250, ?int $height = 250)
+    public function delete(string $fichier, ?string $folder = '', ?int $width = 250, ?int $height = 250): bool
     {
         if($fichier !== 'default.jpeg'){
             $success = false;

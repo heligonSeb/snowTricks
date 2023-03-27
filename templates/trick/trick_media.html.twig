@@ -1,4 +1,10 @@
 <section class="my-4">
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success my-2">
+            {{message}}
+        </div>
+    {% endfor %}
+
     <div class="text-center my-2 d-md-none">
         <button class="btn btn-secondary col-12 col-md-6 see-more" type="button">Voir les médias</button>
     </div>
@@ -10,7 +16,7 @@
             <div class="d-flex justify-content-start align-items-center flex-wrap">
                 {% for movie in trick.movies %}
                     <div class="mx-1">
-                        {{ movie.balise | raw }}
+                        {{ movie.balise | raw}}
                     </div>
                 {% endfor %}
             </div>
