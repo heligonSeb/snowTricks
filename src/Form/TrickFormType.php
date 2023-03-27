@@ -47,7 +47,7 @@ class TrickFormType extends AbstractType
             ])
             ->add('figureGroup', EntityType::class, [
                 'class' => FigureGroup::class,
-                'choice_label' => function ($figureGroup) {
+                'choice_label' => function (FigureGroup $figureGroup) {
                     return $figureGroup->getName();
                 },
                 'label' => 'Nom du groupe de la figure'
