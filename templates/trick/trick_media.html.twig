@@ -16,10 +16,12 @@
             <div class="d-flex justify-content-start align-items-center flex-wrap">
                 {% for movie in trick.movies %}
                     <div class="mx-1">
-                        {{ movie.balise | raw}}
+                        <iframe width="560" height="315" src="{{ movie.path }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                     </div>
                 {% endfor %}
             </div>
+
+
         {% endif %}
         
         {% if trick.pictures|length %}

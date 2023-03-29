@@ -13,6 +13,7 @@ use App\Repository\MovieRepository;
 use App\Repository\PictureRepository;
 use App\Repository\CommentRepository;
 use App\Service\PictureService;
+use App\Service\MovieService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -38,7 +39,7 @@ class TricksController extends AbstractController
     }
 
     #[Route('/tricks/add', name: "add_trick", methods:["GET", "POST"])]
-    public function add(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepo, PictureService $pictureService): Response
+    public function add(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepo, PictureService $pictureService, MovieService $movieService): Response
     {
         $trick = new Figure();
         
@@ -78,6 +79,8 @@ class TricksController extends AbstractController
 
             foreach ($trick->getMovies() as $movie) {
                 if (!$movie->getFigure()) {
+                    $path = $movieService->extractPath($movie->getBalise());
+                    $movie->setPath($path);
                     $movie->setFigure($trick);
                 }
             }
@@ -135,7 +138,7 @@ class TricksController extends AbstractController
     }
 
     #[Route('/tricks/{id}/edit', name: "trick_edit", requirements: ['id' => '\d+'])]
-    public function trickEdit(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, int $id, PictureService $pictureService): Response
+    public function trickEdit(Request $request, EntityManagerInterface $entityManager, FigureRepository $figureRepository, int $id, PictureService $pictureService, MovieService $movieService): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -193,9 +196,11 @@ class TricksController extends AbstractController
                 
                 $trick->addPicture($pic);
             }
-            
+
             foreach ($trick->getMovies() as $movie) {
                 if (!$movie->getFigure()) {
+                    $path = $movieService->extractPath($movie->getBalise());
+                    $movie->setPath($path);
                     $movie->setFigure($trick);
                 }
             }
